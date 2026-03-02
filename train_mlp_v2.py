@@ -216,13 +216,13 @@ def main():
 
     plot_model(
         model,
-        to_file="visuals/mlp_architecture_v1.png",
+        to_file="visuals/mlp_architecture_v2.png",
         show_shapes=True,
         show_layer_names=True,
         dpi=200
     )
 
-    print("Saved: visuals/mlp_architecture_v1.png")
+    print("Saved: visuals/mlp_architecture_v2.png")
 
 # ---------------------------------------------------------
 # Run script

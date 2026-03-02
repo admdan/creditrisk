@@ -90,6 +90,6 @@ print(df["high_risk"].value_counts(normalize=True))
 # Save to CSV
 # -----------------------------
 
-df.to_csv("data/synthetic_credit_risk_v2.csv", index=False)
+df.to_csv("data/synthetic_credit_risk_v1.csv", index=False)
 
 print("\nDataset saved as synthetic_credit_risk.csv")
