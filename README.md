@@ -115,6 +115,9 @@ python train_mlp_v1.py or python train_mlp_v2.py
 - Dataset design strongly influences model behavior.
 - Improving data quality can matter more than increasing model complexity.
 
+## Prepared By
+- Adam Nasir, IST Major, Class of 2026
+
 ## 🏁 Final Takeaway
 
 Sometimes the biggest improvement in a neural network model is not
