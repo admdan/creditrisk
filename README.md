@@ -1,126 +1,223 @@
-# 🧠 Credit Risk Classification with Neural Networks
+# Credit Risk Classification with Neural Networks
 
-A structured deep learning project exploring how a Multi-Layer
-Perceptron (MLP) behaves under different dataset distributions using
-synthetic credit applicant data.
+This repository contains both the **midterm project** and the **final project**
+for an AI/deep-learning course.
 
-This project demonstrates an important idea:
+- The **midterm project** focuses on building a working synthetic credit-risk
+  classification pipeline with a Multi-Layer Perceptron (MLP).
+- The **final project** builds on that baseline by creating a set of intentional
+  bug cases and analyzing how different failures affect model behavior,
+  evaluation, and reflection quality.
 
-**A model can look “good” on accuracy while still being wrong in a
-meaningful way.** 
+The main idea behind the project is simple:
 
-## 📌 Project Overview
+**A model can appear successful on surface metrics like accuracy while still
+failing in important ways.**
 
-Banks and lenders need to decide whether an applicant is low risk or
-high risk. This project frames that as a binary classification task
-using a neural network on tabular financial features.
+## Project Structure
 
-Because real credit datasets are private, the dataset here is
-synthetically generated with:
-- Realistic feature ranges (income, credit score, loan amount, etc.)
-- Nonlinear risk interactions
-- Probabilistic labeling using a sigmoid-based scoring function
+### Midterm base system
 
-## 🔴 Version 1 (Imbalanced Dataset)
+The clean working versions are:
 
-**What happened:**
-Even though the terminal showed high accuracy (0.906),
-the model predicted almost everyone as high risk.
+- `dataset_creation_v1.py`
+- `dataset_creation_v2.py`
+- `train_mlp_v1.py`
+- `train_mlp_v2.py`
 
-**Why this matters:**
-Accuracy was misleading because of severe class
-imbalance and biased probability mapping.
+Datasets are stored in:
 
-**Key Results:** 
-- Accuracy: 0.906
-- Model predicted nearly all applicants as high risk
-- Very poor discrimination for low-risk applicants
+- `data/`
 
-This version shows how accuracy alone can hide structural flaws.
+Baseline visual outputs are stored in:
 
-## 🟢 Version 2 (Calibrated Dataset)
+- `visuals/`
 
-**What changed:**
-The generation logic remained the same, but a probability
-calibration step was added to achieve:
+### Final project extension
 
-> ~70% low risk / ~30% high risk
+The final project lives in:
 
-**Result:**
+- `final_project/`
 
-Accuracy decreased to ~0.750, but predictions became far more meaningful
-and balanced.
+It includes:
 
-This version reflects true classification capability rather than
-dominance of a majority class.
+- bug-case training scripts in `final_project/cases/`
+- case visuals in `final_project/visuals/`
+- case documentation in `final_project/notes/bug_case_plan.md`
 
-## 🏗️ Model Architecture (MLP)
+## Midterm Overview
 
-The neural network consists of:
-- Dense layer (64 neurons, ReLU activation)
-- Dropout layer (30%)
-- Dense layer (32 neurons, ReLU activation)
-- Dropout layer (20%)
-- Output layer (1 neuron, Sigmoid activation)
+The system frames credit risk as a binary classification problem:
 
-Training Configuration:
+- `0` = low risk
+- `1` = high risk
+
+Because real lending data is private, the project uses synthetic applicant
+profiles with realistic feature ranges such as:
+
+- income
+- credit score
+- loan amount
+- debt-to-income ratio
+- employment length
+
+The dataset is generated with nonlinear interactions and a sigmoid-based risk
+scoring process.
+
+### Version 1
+
+Version 1 produces a much more imbalanced dataset. It can show high accuracy
+while still behaving poorly in a meaningful way because the model tends to
+favor the majority class.
+
+### Version 2
+
+Version 2 adds a calibration step during dataset creation so that the class
+distribution is closer to:
+
+- about 70% low risk
+- about 30% high risk
+
+This makes the evaluation much more meaningful and serves as the clean baseline
+for the final project.
+
+## Final Project Overview
+
+The final project starts from the clean `v2` system and creates a series of
+intentional bug cases. Each case changes one part of the pipeline and observes
+what happens.
+
+Examples include:
+
+- target-column mismatch
+- removing feature scaling
+- target leakage
+- non-stratified train/test split
+- threshold misconfiguration
+- wrong output activation
+- wrong loss function
+- learning rate too high
+- dataset calibration removed
+- dropout too high
+
+The purpose of these cases is not just to show crashes. Several bugs still let
+the model run, but they silently damage performance, distort the outputs, or
+make evaluation misleading.
+
+## Model Architecture
+
+The clean MLP baseline uses:
+
+- Dense layer with 64 neurons and ReLU activation
+- Dropout layer with rate `0.30`
+- Dense layer with 32 neurons and ReLU activation
+- Dropout layer with rate `0.20`
+- Output layer with 1 neuron and sigmoid activation
+
+Training configuration:
+
 - Optimizer: Adam
-- Learning rate: 0.001
-- Loss function: Binary Cross-Entropy
-- Epochs: 50
-- Batch size: 32
-- Validation split: 20%
+- Learning rate: `0.001`
+- Loss function: `binary_crossentropy`
+- Epochs: `50`
+- Batch size: `32`
+- Validation split: `0.2`
 
-## 📊 Visual Outputs
+## Python Version
 
-Each training script generates and saves:
+This project is currently configured and tested with:
 
-1.  📈 Training vs Validation Loss Curve
-2.  🔲 Confusion Matrix Heatmap
-3.  📊 Predicted Probability Distribution Histogram
-4.  🧩 MLP Architecture Diagram
+- **Python 3.13.5**
 
-All saved inside the **visuals** folder.
+If you are reproducing the environment, it is safest to use the same Python
+version.
 
-## 🚀 How to Run
+## Requirements
 
-1)  Install dependencies:
+Install the pinned dependencies from:
+
+- `requirements.txt`
+
+Current requirements:
+
+```text
+numpy==2.4.2
+pandas==3.0.1
+matplotlib==3.10.8
+scikit-learn==1.8.0
+tensorflow==2.20.0
+pydot==4.0.1
+graphviz==0.21
+```
+
+Install them with:
 
 ```bash
-pip install numpy pandas matplotlib scikit-learn tensorflow
+pip install -r requirements.txt
 ```
 
-2)  Generate dataset:
+## How to Run
+
+### Midterm baseline
+
+Generate a dataset:
+
 ```bash
-python dataset_creation_v1.py or python dataset_creation_v2.py
-```
-3)  Train model:
-``` bash
-python train_mlp_v1.py or python train_mlp_v2.py
+python dataset_creation_v1.py
+python dataset_creation_v2.py
 ```
 
-## 🧪 Python Libraries Used
+Train the model:
 
-- NumPy
-- Pandas
-- Scikit-learn
-- TensorFlow / Keras
-- Matplotlib
+```bash
+python train_mlp_v1.py
+python train_mlp_v2.py
+```
 
-## 🔍 Key Lessons Learned
+### Final project bug cases
 
-- Accuracy alone can be misleading in imbalanced datasets.
-- Confusion matrices and F1-scores reveal hidden bias.
-- Neural networks amplify patterns present in the data.
-- Dataset design strongly influences model behavior.
-- Improving data quality can matter more than increasing model complexity.
+Run any case from the repo root:
 
-## 🏁 Final Takeaway
+```bash
+python final_project/cases/case1.py
+python final_project/cases/case2.py
+...
+python final_project/cases/case10.py
+```
 
-Sometimes the biggest improvement in a neural network model is not
-adding more layers.
+Case 9 also includes a separate dataset-generation step:
 
-It is fixing the dataset so the model is forced to learn something real.
+```bash
+python final_project/cases/dataset_creation_case9.py
+python final_project/cases/case9.py
+```
 
-## Prepared By
+## Visual Outputs
+
+The training scripts generate:
+
+- training vs validation loss curve
+- confusion matrix heatmap
+- predicted probability distribution histogram
+- MLP architecture diagram
+
+Midterm visuals are saved in:
+
+- `visuals/`
+
+Final-project case visuals are saved in:
+
+- `final_project/visuals/`
+
+## Key Lessons
+
+- Accuracy alone can be misleading.
+- Dataset design strongly affects model behavior.
+- Preprocessing, loss functions, thresholds, and optimization settings all
+  matter.
+- An AI system should be treated as a full pipeline, not just a model.
+- Silent failures can be as dangerous as runtime errors.
+
+## Author
+
 - Adam Nasir, IST Major, Class of 2026
